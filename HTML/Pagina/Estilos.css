@@ -1,0 +1,105 @@
+
+body {
+    background-color: #0B1026;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    justify-content: space-between;
+
+}
+
+header {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    letter-spacing: 2px;
+    color: darkorange;
+    display: flex;
+    align-items: center;          /* centra verticalmente */
+    justify-content: space-between; /* separa: logo izq, título centro, redes der */
+    padding: 20px;
+}
+
+header div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+hr{
+    height: 5px;
+    background: darkorange;
+    border: 5px solid rgb(0, 0, 0);
+}
+section {
+    min-height: 100vh;   /* cada sección ocupa la pantalla */
+    overflow: hidden;
+}
+
+nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: darkorange;
+    display: flex;
+    justify-content: center;
+    border: 5px solid rgb(0, 0, 0);
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: darkblue;
+    padding: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.quien-es{
+    display: flex;
+    gap: 20px; 
+    padding: 20px;
+    text-align: justify;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.quien-es h2{
+    color: darkorange;
+    text-align: center;
+    font-size: 30px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.frase {
+    display: flex;              
+    align-items: center;        
+    justify-content: space-between;
+    gap: 20px;                  
+}
+
+.frase p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    flex: 1;
+    text-align: center;                    
+    margin: 0;                  
+}
+
+.frase img {
+    width: 200px;               
+    height: auto;
+}
+
+#Titulo2{
+    color: darkorange;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-decoration-line:underline;
+
+}
