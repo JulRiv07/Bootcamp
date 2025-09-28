@@ -5,7 +5,6 @@ body {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     text-align: center;
     justify-content: space-between;
-
 }
 
 header {
@@ -13,9 +12,10 @@ header {
     letter-spacing: 2px;
     color: darkorange;
     display: flex;
-    align-items: center;          /* centra verticalmente */
-    justify-content: space-between; /* separa: logo izq, título centro, redes der */
+    align-items: center;          
+    justify-content: space-between; 
     padding: 20px;
+    
 }
 
 header div{
@@ -30,7 +30,7 @@ hr{
     border: 5px solid rgb(0, 0, 0);
 }
 section {
-    min-height: 100vh;   /* cada sección ocupa la pantalla */
+    min-height: 100vh;  
     overflow: hidden;
 }
 
@@ -60,6 +60,34 @@ nav ul li a {
     color: darkblue;
     padding: 30px;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.Introduccion{
+    align-items: center;
+    text-align: justify;
+    max-width: 900px;
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+    gap: 30px;
+    
+}
+
+#ImagenE{
+    border: 3px solid orange;
+    border-radius: 15px;
+}
+
+#ImagenE:hover{
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px darkorange;
+    filter: brightness(1.2) contrast(1.1) saturate(1.5);
+}
+
+#ImagenA{
+    transform: scale(1);
+    box-shadow: 0 6px 20px darkorange;
+    filter: brightness(1.2) contrast(1.1) saturate(1.5);
 }
 
 .quien-es{
@@ -103,3 +131,27 @@ nav ul li a {
     text-decoration-line:underline;
 
 }
+
+.Transformaciones div{
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+    gap: 20px;
+
+    .Tr{
+        h2{
+            text-align: center;
+            color: darkorange;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        img:hover{
+            transform: scale(1.1);
+            filter: brightness(1.2) contrast(1.1) saturate(1.5);
+        }
+    }
+    
+}
+
