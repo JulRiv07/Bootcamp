@@ -9,10 +9,8 @@
 </head>
 
 <body>
-    <header id="cabeza" >
-        <img src="dragon-ball-z.png" alt="Inicio" width="100px" >
-        <h1> GOKU... SU HISTORIA <h1>
-        <div>
+    <section class="hero">
+        <div class="logos">
             <a href="https://www.instagram.com/goku.latino?igsh=MTh3enUwMGEwb3YycQ==" 
                 target="_blank"> <img src="Insta.png">
             </a>
@@ -24,15 +22,16 @@
                 <img src="crunchyroll.png">
             </a>
         </div>
-    </header>
-    
+    </section>
     <nav>
         <ul>
             <li> <a href="#inicio1" onclick="showsection('inicio1')"> <b> Introduccion </b></a> </li>
             <li> <a href="#quien" onclick="showsection('quien')" > <b> ¿Quien es? </b></a> </li>
             <li><a href="#transformaciones" onclick="showsection('transformaciones')" > <b> Transformaciones </b></a> </li>
             <li><a href="#poder" onclick="showsection('poder')" > <b> Poderes </b></a> </li>
-            <li> <a href="#"  > <b> Mas info </b> </a> </li>
+            <li><a href="#Vida" onclick="showsection('vida')" > <b> Informacion personal </b></a> </li>
+            <li> <a href="#contrincantes"  onclick="showsection('contrincantes')"> <b> Contrincantes </b> </a> </li>
+            <li> <a href="#masinfo"  onclick="showsection('masinfo')"> <b> Mas info </b> </a> </li>
         </ul>
     </nav>
     <hr id="inicio1">
@@ -41,15 +40,17 @@
     <hr>
     <div class="Introduccion">
         <img src="poder.jpg" width="300" height="500" id="ImagenE">
-        <p>
-            <img src="th.jfif" alt="Intro" id="ImagenA"> 
-            <br><br><br>
-            <b> Dragon Ball</b> es una de las series de anime más populares y queridas en todo el mundo. 
-            Creada por Akira Toriyama, esta historia épica sigue las aventuras de Goku, un poderoso guerrero Saiyajin, en su búsqueda por proteger la Tierra de amenazas intergalácticas. 
-            A lo largo de los años, Goku se ha convertido en un icono de la cultura pop y ha capturado los corazones de millones de fans en todo el mundo.
-            <br><br>Exploraremos la historia de Goku desde su infancia hasta convertirse en el héroe legendario que conocemos hoy en día. 
-            Descubriremos las habilidades y transformaciones que ha adquirido a lo largo de su viaje, como el Super Saiyajin, seres queridos y a la humanidad. Prepárate para sumergirte en el fascinante mundo de Goku y descubrir por qué se ha convertido en uno de los personajes más icónicos de todos los tiempos.
-        </p>
+        <div>
+            <img src="th.jfif" alt="Intro" id="ImagenA">
+            <p>
+                <br><br><br>
+                <b> Dragon Ball</b> es una de las series de anime más populares y queridas en todo el mundo. 
+                Creada por Akira Toriyama, esta historia épica sigue las aventuras de Goku, un poderoso guerrero Saiyajin, en su búsqueda por proteger la Tierra de amenazas intergalácticas. 
+                A lo largo de los años, Goku se ha convertido en un icono de la cultura pop y ha capturado los corazones de millones de fans en todo el mundo.
+                <br><br>Exploraremos la historia de Goku desde su infancia hasta convertirse en el héroe legendario que conocemos hoy en día. 
+                Descubriremos las habilidades y transformaciones que ha adquirido a lo largo de su viaje, como el Super Saiyajin, seres queridos y a la humanidad. Prepárate para sumergirte en el fascinante mundo de Goku y descubrir por qué se ha convertido en uno de los personajes más icónicos de todos los tiempos.
+            </p>
+        </div>
         <img src="goku-en-accion.jpg " width="300" height="500" id="ImagenE">
     </div>
     <section id="quien">
@@ -57,7 +58,7 @@
         <div class="quien-es">
             <img src="Son_Goku_en_Super_Hero.webp" alt="Quien es?" width="200">
             <div id="inicio"> 
-                <h2> Quien es Goku? </h2>
+                <h2 style="color: #0B1026; font-family: Georgia, 'Times New Roman', Times, serif; background: darkorange;"> Quien es Goku? </h2>
                 <p style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"></p>
                     Son Goku, nacido como Kakarotto en el Planeta Vegeta, es un guerrero de la raza Saiyajin.                     Fue enviado a la Tierra siendo un bebé para conquistarla, pero un golpe en la cabeza lo hizo olvidar su misión y crecer como un niño noble y de buen corazón, criado por el Abuelo Gohan. 
                     Desde pequeño demostró una fuerza increíble y una pasión infinita por el combate.
@@ -92,7 +93,7 @@
     <hr>
     <section class="Transformaciones" id="transformaciones">
         <br>
-        <h1 id="Titulo2"> Sus Transformaciones </h1>
+        <h1 id="Titulo2" style="color: #0B1026; font-family: Georgia, 'Times New Roman', Times, serif; background: darkorange;"> Sus Transformaciones </h1>
         <br>
         <div>
             <div class="Tr">
@@ -165,7 +166,255 @@
     </section>
     <hr>
     <section id="poder">
+        <table>
+            <tr>
+                <th colspan="3" class="thp">Poderes de Goku</th>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <th class="col-descripcion">Descripción</th>
+                <th class="col-foto">Foto</th
+            </tr>
+            <tr>
+                <td>Kamehameha</td>
+                <td>Onda de energía icónica, concentrada y liberada con las manos.</td>
+                <td><img src="kamekameha.jpg" width="150"></td>
+            </tr>
+            <tr>
+                <td>Genki Dama</td>
+                <td>Esfera creada con la energía vital de seres vivos.</td>
+                <td><img src="genki.jpg" width="120"></td>
+            </tr>
+            <tr>
+                <td> Rayo Ocular </td>
+                <td> Disparo de energia desde los ojos </td>
+                <td><img src="rayo.png" width="150"> </td>
+            </tr>
+            <tr>
+                <td> Teletransportación </td>
+                <td> Movimiento instantáneo hacia cualquier lugar donde detecte un ki. </td>
+                <td><img src="Teletransportacion.jpg" width="150"> </td>
+            </tr>
+            <tr>
+                <td> Kiai </td>
+                <td> Empuje invisible de energía que repele al oponente. </td>
+                <td><img src="Kiai_.webp" width="150"> </td>
+            </tr>
+            <tr>
+                <td> Puño de dragón </td>
+                <td> Golpe final con forma de dragón dorado que atraviesa al enemigo. </td>
+                <td><img src="dragon.jpg" width="150"> </td>
+            </tr>
+            <tr>
+                <td> Puño de dragón </td>
+                <td> Golpe final con forma de dragón dorado que atraviesa al enemigo. </td>
+                <td><img src="kameK" width="150"> </td>
+            </tr>
+        </table>
+    </section>
+    <hr>
+    <section id="Vida">
+        <h1 style="color: #0B1026; font-family: Georgia, 'Times New Roman', Times, serif; background: darkorange;"> Su vida amorosa... </h1>
+        <div>
+            <img src="esposa.webp" width= "400" height="390px">
+            <p>
+                Goku conoció a Chi-Chi (Milk) de niño y, sin entender del todo qué significaba, le prometió casarse con ella. Años más tarde, en el Torneo de las Artes Marciales, le recordó esa promesa y finalmente se casaron. 
+                Aunque Goku es ingenuo en temas de amor y pasa gran parte del tiempo entrenando o peleando, quiere profundamente a su esposa y siempre regresa para estar con ella y proteger a su familia. 
+                Chi-Chi, por su parte, representa el pilar del hogar, la disciplina y el cuidado de sus hijos, equilibrando la vida de un guerrero que vive entre batallas y entrenamientos.
+                <br> <br>Chi-Chi mantiene el hogar, impulsa los estudios y la estabilidad; Goku aporta la protección y el pan “a golpes cósmicos”. 
+                Se aman a su manera: él simple y honesto, ella firme y cariñosa (con regaño incluido).
+                <br><br>Chi-Chi es el ancla emocional y logística de la familia Son: fija reglas, cuida, alimenta, y—cuando toca—se pone los guantes. Sin ella, Goku salva universos… pero no tendría hogar al cual volver.
+            </p>
+            <br><img src="hijos.jpg" width="200px">
+        </div>
+        <h1 style="color: #0B1026; font-family: Georgia, 'Times New Roman', Times, serif; background: darkorange;"> Sus hijos...</h1>
+        <div>
+            <div class="Inter">
+                <center>
+                    <h1> Gohan </h1>
+                    <img src="gohan.webp" width="200">
+                </center>
+                <p>
+                    El primogénito de Goku y Chi-Chi. Inteligente y estudioso, orientado más hacia la vida académica por su madre, aunque heredó el potencial de combate de su padre. En su juventud fue clave en la derrota de Cell, demostrando un poder oculto increíble. 
+                    Representa el balance entre la fuerza guerrera de los Saiyajin y el corazón bondadoso de los terrícolas.
+                </p>
+            </div>
+            <div class="Inter">
+                <center>
+                    <h1> Goten </h1>
+                    <img src="goten.png" width="230">
+                </center>
+                <p>     
+                    El hijo menor. Alegre, espontáneo y con una personalidad mucho más libre que la de Gohan. 
+                    Desde muy pequeño demostró un talento natural para pelear, llegando a transformarse en Super Saiyajin a muy corta edad. Su relación cercana con Trunks lo convirtió en parte de un dúo dinámico lleno de energía y travesuras.
+                </p> 
+            </div>
+        </div>
+        <h1 style="color: #0B1026; font-family: Georgia, 'Times New Roman', Times, serif; background: darkorange;"> Sus amigos... </h1>
+        <div class="Amigos">
+            <div class="Inter2">
+                <center>
+                    <h1> Krilin </h1>
+                    <img src="krilin.png" width="200">
+                </center>
+                <p>
+                    Su mejor amigo desde la infancia, casi como un hermano
+                </p>
+            </div>
+            <div class="Inter2">
+                <center>
+                    <h1> Bulma </h1>
+                    <img src="Bulma.png" width="207">
+                </center>
+                <p>
+                    Amiga de toda la vida, soporte tecnológico y emocional.
+                </p> 
+            </div>
+            <div class="Inter2">
+                <center>
+                    <h1> Vegeta </h1>
+                    <img src="vegeta.png" width="160">
+                </center>
+                <p>
+                    Rival eterno, hoy en día un aliado inseparable.                 
+                </p>
+            </div>
+            <div class="Inter2">
+                <center>
+                    <h1> Maestro Roshi </h1>
+                    <img src="roshi.webp" width="190">
+                </center>
+                <p>     
+                    Su primer mentor en artes marciales.
+                </p> 
+            </div>
+            <div class="Inter2">
+                <center>
+                    <h1> Whis </h1>
+                    <img src="whis.png" width="190">
+                </center>
+                <p>     
+                    Maestro divino que lo guía en los niveles más altos de poder.
+                </p> 
+            </div>
+        </div>
+    </section>
 
+    <hr id="contrincantes">
+    <h1 style="color: #0B1026; font-family: Georgia, 'Times New Roman', Times, serif; background: darkorange;"> Sus Contrincantes...</h1>
+    <section class="contrincantes">
+        <div class="contri">
+            <div class="contrincan">
+                <h1> Vegeta </h1>
+                <img src="vege.png" width="200" height="350px">
+                <p> 
+                    Príncipe de los Saiyajin. Fue vencido en su primer combate tras quedar gravemente herido; 
+                    escapó y más tarde se convirtió en aliado.
+                </p> 
+            </div>
+            <div class="contrincan">
+                <h1> Freezer </h1>
+                <img src="freezer.png" width="200" height="350px">
+                <p> 
+                    Tirano galáctico y destructor del planeta Vegeta. 
+                    Fue derrotado en Namek cuando Goku se transformó en Super Saiyajin por primera vez.
+                </p> 
+            </div>
+            <div class="contrincan">
+                <h1> Cell </h1>
+                <img src="cell.png" width="200" height="350px">
+                <p> 
+                    Bioandroide que alcanzó la perfección. 
+                    Aunque Goku lo enfrentó, fue Gohan quien finalmente lo venció con un Kamehameha final.
+                </p> 
+            </div>
+        </div>
+        <div class="contri">
+            <div class="contrincan">
+                <h1> Majin Buu </h1>
+                <img src="majin.png" width="200" height="350px">
+                <p> 
+                    Ser mágico con múltiples formas. 
+                    Goku lo destruyó en su versión final, Kid Buu, con una Genki Dama creada con la energía de toda la humanidad.
+                </p> 
+            </div>
+            <div class="contrincan">
+                <h1> Beerus </h1>
+                <img src="Beerus.webp" width="200" height="350px">
+                <p> 
+                    Dios de la Destrucción. 
+                    Goku alcanzó el estado de Super Saiyajin Dios para luchar contra él, pero no lo derrotó; Beerus decidió perdonarlo.
+                </p> 
+            </div>
+            <div class="contrincan">
+                <h1> Hit </h1>
+                <img src="hit.png" width="200" height="350px">
+                <p> 
+                    Asesino del Universo 6 con la habilidad de saltar en el tiempo. 
+                    Su combate con Goku terminó en empate.
+                </p> 
+            </div>
+        </div>
+        <div class="contri">
+            <div class="contrincan">
+                <h1> Zamasu </h1>
+                <img src="zamasu.png" width="200" height="350px">
+                <p> 
+                    Kaio-shin aprendiz que robó el cuerpo de Goku en otra línea temporal. 
+                    Fue eliminado finalmente gracias a Zeno-sama, el rey de todo.
+                </p> 
+            </div>
+            <div class="contrincan">
+                <h1> Jiren </h1>
+                <img src="jiren.png" width="200" height="350px">
+                <p> 
+                    Guerrero del Universo 11 con fuerza descomunal. 
+                    Fue sacado de la arena en el Torneo del Poder gracias a la unión de Goku, Freezer y Androide 17.
+                </p> 
+            </div>
+            <div class="contrincan">
+                <h1> Moro </h1>
+                <img src="moro.png" width="200" height="350px">
+                <p> 
+                    Devorador de planetas del manga de Dragon Ball Super. 
+                    Fue derrotado por Goku usando el Ultra Instinto completo.
+                </p> 
+            </div>
+        </div>
+    </section>
+    <hr>
+    <section id="masinfo" >
+        <div class="Infomia">
+            <h2> By: Julian Rivera Sanchez </h2>
+            <div class="contacto">
+                <p> Correo: julian.rivera@utp.edu.co</p>
+                <p> Direccion: Calle 17 #27-60</p>
+                <p> Universidad Tecnologica de Pereira</p>
+            </div>
+            <div class="iconos">
+                <a href="https://github.com/JulRiv07"> <img src="github.png" width="30px"> </a>
+                <a href="https://www.instagram.com/julian_rivera007?igsh=aW55YnFjcHY0ajJq&utm_source=qr"> <img src="Insta.png" > </a>
+                <a href="https://w.app/gym3tx"> <img src="whatsapp.png".png" > </a>
+            </div>
+            <br>
+        </div>
+        
+        <div class="logos">
+            <p> Ver mas de Goku: </p> <br>
+            <a href="https://www.instagram.com/goku.latino?igsh=MTh3enUwMGEwb3YycQ==" 
+                target="_blank"> <img src="Insta.png"> <br>
+            </a>
+            <a href="https://www.youtube.com/@MundoDragonBallOficial77" 
+                target="_blank"> <img src="youtube_logo_icon_147199.png">
+            </a>
+            <a href="https://www.crunchyroll.com/es/series/G9VHN9PPW/dragon-ball-z"
+                target="_blank">
+                <img src="crunchyroll.png"> <br>
+            </a>
+            <a href="https://www.netflix.com/watch/81943979" target="_blank"> 
+                <img src="netflix.png" width="30">
+            </a>
+        </div>
     </section>
 </body>
 </html>
