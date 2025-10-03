@@ -1,0 +1,94 @@
+html, body {
+    margin: 0 auto;
+    overflow-x: hidden;  
+    color: black;
+    font-family: Arial, Helvetica, sans-serif   ;
+}
+
+.Intro{
+    p{
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    text-align: center;
+    img {
+        height: auto;        
+        border-radius: 20px; 
+    }
+}
+
+.Contenedor{
+    padding: 2rem;
+}
+
+.Slider-Externo{
+    position: relative;
+    max-width: 50rem;
+    margin: 0 auto;
+}
+
+.Slider{
+    display: flex;
+    overflow-y: hidden;       
+    scroll-behavior: smooth;
+    box-shadow: 0 1.5rem 3rem darkgray;     
+}
+
+.Slider::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+    display: none;            
+    background: transparent;
+}
+
+.Slider > *{
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    padding: 1rem;                 
+    display: flex;
+    flex-direction: column;        
+    align-items: center;          
+    gap: 5px;                   
+    box-sizing: border-box;
+}
+
+.Slider img{
+    width: 100%;
+    aspect-ratio: 16 / 9;          
+    height: auto;                   
+    object-fit: cover;                              
+    border-radius: 8px;           
+}
+
+.Contexto p{
+    color: #111;                    
+    margin: 0;
+    max-width: 600px;        
+    padding: 20px;
+    color: black;
+}
+
+.Slidernav{
+    display: flex;
+    column-gap: 16px;
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    background: gray;
+    padding: 4px 8px;
+    border-radius: 1600px;
+}
+
+.Slidernav a{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    opacity: 1;
+}
+.Slidernav a:hover{
+    opacity: 1;
+    transform: scale(1.1);
+}
