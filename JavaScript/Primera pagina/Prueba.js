@@ -36,3 +36,35 @@ btnSumar.addEventListener("click", () => {
     const n2 = Number(b.value);
     resSuma.innerText = `Resultado: ${n1+n2}`;
 });
+
+const form = document.getElementById("calc");
+const x = document.getElementById("x");
+const y = document.getElementById("y");
+const opc = document.getElementById("opc");
+const result = document.getElementById("result");
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const nx = Number(x.value);
+    const ny = Number(y.value);
+    let r;
+
+    switch(opc.value){
+        case "+": 
+            r = nx + ny;
+            break;
+        case "-": 
+            r = nx - ny;
+            break;
+        case "/":
+            r = nx / ny;
+            break;
+        case "*":
+            r = nx * ny;
+            break;
+    }
+
+    result.innerText = `Total = ${r}`;
+
+});
