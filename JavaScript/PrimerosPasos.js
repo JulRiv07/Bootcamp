@@ -51,8 +51,24 @@ switch (dia) {
 }
 
 //? Bucles (while, do while, for) 
+
+//* While, mientras algo sea verdadero
 let i = 1;
 while( i <= 3 ){
     console.log("Vuelta: " + i);
     i++;
 }
+
+let x = 1;
+do {
+    console.log("X vale: " + X);
+    X++;
+} while(x <= 3);
+
+for(let i = 0; i < 5; i++){
+    console.log("i = " + i);
+}
+
+
+
+
