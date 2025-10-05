@@ -134,4 +134,17 @@ const nums = [1,2,3,4,5];
 const dobles = nums.map(n => n * 2);
 const pares = nums.filter(n => n % 2 === 0);
 
+// ! ---------------------------------------------------------------------------------
+
+//? Modulos
+
+//! Exportar:
+export function suma(a,b) {return a + b;}
+export const PÍ = 3.1416;
+
+//! Import
+import { suma , PI } from './utils.js';  //! './utils.js' (Cambiar por el nombre del archivo)
+console.log(suma(2,3), PI); 
+
+// ! ---------------------------------------------------------------------------------
 
