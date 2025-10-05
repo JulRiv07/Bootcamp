@@ -16,4 +16,12 @@ const a = number(prompt("Ingresar un numero: "));
 const b = number(prompt("Ingrese otro numero: "));
 alert("La suma es: " + (a + b));
 
+//? Operadores mas importantes
+//* aritmeticos: +, -, *, /, %, **.
+//* comparacion: === (Igual estrictamente), !==, <, >, <=, >=-
+//* logicos: && (Y), | (o), ! (no).
+console.log(2+3);
+console.log(10%3);
+console.log(5 === "5");
+console.log(true &&  false);
 
