@@ -49,3 +49,10 @@ switch (dia) {
     default: console.log("Fin de semana");
         break;
 }
+
+//? Bucles (while, do while, for) 
+let i = 1;
+while( i <= 3 ){
+    console.log("Vuelta: " + i);
+    i++;
+}
