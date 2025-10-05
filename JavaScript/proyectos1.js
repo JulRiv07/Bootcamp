@@ -35,10 +35,16 @@ function Lista_compras(){
         opc = prompt("a) Agregar \n b) Ver \n c) Quitar \n d) Salir \n Que opcion desea: ");
         switch(opc){
             case "a":
+                const item = prompt("Que agregar? ");
+                compras.push(item);
                 break;
             case "b":
+                console.log("La lista de compras es: ", compras);
                 break;
             case "c":
+                const item2 = prompt("¿Que desea quitar? ");
+                const i = compras.indexOf(item2);
+                if (i >= 0) compras.splice(i, 1);
                 break;
             case "d": alert("¡Chao!");
                 break;
