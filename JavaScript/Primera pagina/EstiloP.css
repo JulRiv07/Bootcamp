@@ -1,0 +1,8 @@
+body{
+    font-family: system-ui;
+    padding: 16px;
+}
+
+.resaltado{
+    background: yellow;
+} 
