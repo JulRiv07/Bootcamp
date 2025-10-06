@@ -1,6 +1,15 @@
 body{
     font-family: system-ui;
     padding: 16px;
+    background: wheat;
+    color: brown    ;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 1200;
+}
+
+#titulo{
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .resaltado{

@@ -68,3 +68,32 @@ form.addEventListener("submit", (e) => {
     result.innerText = `Total = ${r}`;
 
 });
+
+const nom = document.getElementById("nom");
+const age = document.getElementById("age");
+const btnInfo = document.getElementById("btnInfo");
+const salida2 = document.getElementById("salida2");
+
+btnInfo.addEventListener("click", () => {
+    const n = nom.value.trim();
+    const e = Number(age.value);
+
+    if (!n) {
+        salida2.innerText = "Escriba un nombre";
+        return;
+    }
+
+    if (age.value.trim() === "" || Number.isNaN(e)) { 
+        salida2.innerText = "Escriba un numero valido";
+        return;
+    }
+
+    let texto = `Hola ${n}. Tienes ${e} años.`;
+    if (e < 18) {
+        texto += `\n Eres menor de edad`;
+    } else if (e >= 18){
+        texto += `\n Eres mayor de edad`;
+    }
+
+    salida2.innerText = texto;
+});
