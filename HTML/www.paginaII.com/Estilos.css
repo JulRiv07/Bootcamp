@@ -18,6 +18,7 @@
 .main{
     display: flex;
     flex-direction: row;
+    
     background: rgb(232, 217, 217);
     .menu{
         padding: 40px;
@@ -27,7 +28,7 @@
         background: rgb(45, 45, 214);
         height: 520px;
         width: 250px;
-        
+        height: 580px;
 
         a{
             font-family: Georgia, 'Times New Roman', Times, serif;
@@ -38,6 +39,8 @@
     }
     .Contenido{
         padding: 20px;
+        background: rgb(154, 154, 154);
+        width: 14000px;
     }
 }
 
