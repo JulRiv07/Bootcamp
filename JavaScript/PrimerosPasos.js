@@ -148,3 +148,46 @@ console.log(suma(2,3), PI);
 
 // ! ---------------------------------------------------------------------------------
 
+// Tabla de multiplicar del 4:
+for(let i = 1; i <= 10; i++){
+    console.log("4 X " + i, " = " +  (4 * i) );
+}
+// Tablas de multiplicar
+let n = Number(prompt("Ingrese el numero del que desea la tabla de multiplicar: "));
+for(let i = 1; i <= 10; i++){
+    console.log( n + " X " + i, " = " + (n*i));
+}
+
+// Menor o mayor de edad
+let agee = prompt("Ingrese su edad: ");
+agee = parseInt(agee);
+if(agee < 18){
+    console.log("Usted es menor de edad");
+} else { console.log("Usted es mayor de edad"); }
+
+// 2 cualquiera 
+const day = prompt("Dia (lu, ma, mi, ju, vi)");
+switch (dia) {
+    case "lu":
+    case "ma":
+    case "mi":
+    case "ju":
+    case "vi":
+        console.log("Es dia laboral");
+        break;
+    default: console.log("Fin de semana");
+        break;
+}
+
+const secreto = Math.floor(Math.random() * 10) + 1;
+let intento;
+let cuenta = 0;
+
+do{
+    intento = Number(prompt("Adivina (1-10): "));
+    cuenta++;
+    if(intento > secreto ) alert("Muy alto");
+    else if(intento < secreto) alert("Muy bajo");
+} while(intento !== secreto);
+
+alert(`¡Acertaste en ${cuenta} intentos`);

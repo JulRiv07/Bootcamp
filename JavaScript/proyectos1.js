@@ -64,7 +64,7 @@ function main(){
             const y = Number(prompt("Ingrese otro numero: "));
             console.log("El resultado calculado es: " + Calculadora(x, y));
             break;
-        case 2:
+        case 2: 
             Adivinar(); 
             break;
         case 3:
