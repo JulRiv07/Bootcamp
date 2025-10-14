@@ -11,7 +11,6 @@
   }
   *{box-sizing:border-box} html,body{height:100%;margin:0}
 
-  /* ===== FONDO POR DEFECTO (MALIGNO) ===== */
   body{
     font-family:var(--mono); color:var(--fg);
     background:linear-gradient(180deg,#000,#080004);
@@ -19,7 +18,6 @@
     transition: background 500ms ease, color 500ms ease;
   }
 
-  /* ===== ESTADO PREVIO (ROSA) MIENTRAS PIDE CLIC ===== */
   body.prestart{
     color:#1a1a1a;
     background:
@@ -30,7 +28,6 @@
 
   .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px}
   .card{width:min(1100px,96%);max-width:1200px;background:rgba(0,0,0,0.75);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 30px 80px rgba(0,0,0,0.8)}
-  /* En prestart, hacemos la tarjeta más amable (clara) por si se ve antes de empezar */
   body.prestart .card{background:rgba(255,255,255,0.78);border:1px solid rgba(0,0,0,0.06);color:#111}
   header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
   .title{font-size:1.2rem;color:var(--danger);letter-spacing:.12em;text-transform:uppercase}
@@ -55,10 +52,9 @@
   .overlay-esc{position:fixed;right:18px;top:18px;background:rgba(0,0,0,0.55);padding:8px 12px;border-radius:12px;color:#ffdede;z-index:30}
   body.prestart .overlay-esc{background:rgba(255,255,255,0.7);color:#111;border:1px solid rgba(0,0,0,0.06)}
 
-  /* Overlay para pedir el gesto (clic/tecla) */
   .gesture{
     position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    background:rgba(0,0,0,0.1); /* será rosado por el fondo del body.prestart */
+    background:rgba(0,0,0,0.1);
     z-index:60;
   }
   .gesture .box{
@@ -70,13 +66,32 @@
     margin-top:12px; padding:10px 14px; border-radius:10px; border:1px solid #b91c1c; background:#fff0f3; color:#9f1239; font-weight:800; cursor:pointer;
   }
   .hidden{display:none}
+
+  #niceMessage {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #ffb7b7;
+    font-weight: 600;
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-align: center;
+    letter-spacing: .05em;
+    z-index: 80;
+    visibility: hidden;
+  }
 </style>
 </head>
 <body class="prestart">
   <div class="stage" aria-live="polite">
     <div class="card" role="main">
       <header>
-        <div class="title">SYSTEM INTEGRITY — HACKEAD@! </div>
+        <div class="title">SYSTEM INTEGRITY </div>
         <div class="hint" id="time">--:--:--</div>
       </header>
       <div class="log" id="log" aria-atomic="true"></div>
@@ -90,7 +105,6 @@
 
   <div class="scanline" aria-hidden="true"></div>
 
-  <!-- Overlay de gesto con fondo rosado (lo pone body.prestart) -->
   <div id="gestureOverlay" class="gesture hidden" role="dialog" aria-modal="true" aria-labelledby="gtitle">
     <div class="box">
       <h3 id="gtitle" style="margin:0 0 8px 0;">Un último toque 💖</h3>
@@ -99,8 +113,9 @@
     </div>
   </div>
 
+  <div id="niceMessage">Al dar click en cada uno de los botones ya nos diste acceso. <br> No importa si das ESC o cierras la ventana, no hay vuelta atras. <br> Podras ver que al oprimir ESC el proceso no se detiene</div>
+
 <script>
-  /* ===== Estado & utilidades ===== */
   const log = document.getElementById('log');
   const bar = document.getElementById('bar');
   const counter = document.getElementById('counter');
@@ -108,6 +123,8 @@
   const bigAlert = document.getElementById('bigAlert');
   const gestureOverlay = document.getElementById('gestureOverlay');
   const continueBtn = document.getElementById('continueBtn');
+  const niceMessage = document.getElementById('niceMessage');
+  const niceMessage2 = document.getElementById('niceMessage2');
 
   let prog = 0, compromisos = 0, running = false, intervalId = null, endAlertShown = false;
 
@@ -121,15 +138,12 @@
     log.scrollTop=log.scrollHeight;
   }
 
-  /* ===== Bloqueos UX ===== */
   window.addEventListener('contextmenu', e=>e.preventDefault());
-  // Bloquea todas las teclas salvo "*"
   document.addEventListener('keydown', e=>{
     if (e.key === '*'){ e.preventDefault(); e.stopImmediatePropagation(); stopSim(); pushLine(`[${now()}] SIMULACIÓN DETENIDA (tecla *).`, true); return; }
     e.preventDefault(); e.stopImmediatePropagation();
   }, true);
 
-  /* ===== Fullscreen helpers ===== */
   function requestFS(){
     const el = document.documentElement;
     if (document.fullscreenElement || document.webkitFullscreenElement) return Promise.resolve();
@@ -141,24 +155,21 @@
   }
 
   function startFlow(){
-    // Aquí quitamos el fondo rosado y pasamos a “maligno”
     document.body.classList.remove('prestart');
+    niceMessage.style.visibility = 'visible';  
     pushLine(`[${now()}] Context ready. Starting malignant sequence...`, true);
     startSim();
   }
 
   function ensureFullscreenOrAsk(){
-    // Intento inmediato (por si el navegador conservó la activación)
     requestFS().then(()=>{
-      startFlow(); // ya en fullscreen: quitamos rosado y arrancamos
+      startFlow();
     }).catch(()=>{
-      // Mostrar overlay y esperar primer gesto
       gestureOverlay.classList.remove('hidden');
       const accept = () => {
         requestFS().finally(()=>{
           gestureOverlay.classList.add('hidden');
-          startFlow(); // quitamos rosado y arrancamos
-          // limpiar listeners
+          startFlow();
           document.removeEventListener('pointerdown', accept, true);
           document.removeEventListener('keydown', accept, true);
         });
@@ -169,7 +180,6 @@
     });
   }
 
-  /* ===== Flujo principal ===== */
   const templates = [
     id => `[${now()}] Scanning sector ${id} ... CHECKSUM OK`,
     id => `[${now()}] Handshake failed with node ${id} — retrying`,
@@ -214,13 +224,9 @@
         if(performance.now()-t0 > monitorTime){
           clearInterval(intervalId);
           endAlertShown = true;
-
-          /* ======= ADICIÓN 1/2: Mensajes bonitos en el log ======= */
-          pushLine(`[${now()}] Al dar click en cada uno de los botones ya nos diste acceso.`, true);
-          pushLine(`[${now()}] No importa si das ESC o cierras la ventana, no hay vuelta atras`, true);
-
-          /* ======= ADICIÓN 2/2: Alert final agradeciendo ======= */
-          alert("Sus datos han sido oficialmente robados, I'm sorry");
+          pushLine(`[${now()}] 💖 Gracias por participar en esta simulación.`, true);
+          pushLine(`[${now()}] Esperamos que hayas disfrutado esta pequeña experiencia visual.`, true);
+          alert("✨ ¡Gracias por probar SYSTEM INTEGRITY! ✨\n\nNo se ejecutó nada real, todo era una simulación visual creada para fines académicos.\n\n¡Buen trabajo!");
         }
       }, 2600 + Math.random()*2400);
     }
@@ -251,19 +257,13 @@
     bar.style.background='linear-gradient(90deg,#6bff8b,#32ff6b)';
   }
 
-  /* ===== Auto-modo si viene de Friendly ===== */
-  function getParam(name){
-    return new URLSearchParams(location.search).get(name);
-  }
+  function getParam(name){ return new URLSearchParams(location.search).get(name); }
 
   window.addEventListener('load', ()=>{
     const auto = getParam('auto') === '1';
-    if(auto){
-      ensureFullscreenOrAsk(); // mostrará rosa y pedirá gesto si hace falta
-    }else{
-      // Si llegan manual, igual mostramos el overlay rosa
+    if(auto){ ensureFullscreenOrAsk(); }
+    else{
       gestureOverlay.classList.remove('hidden');
-      // y seguimos el mismo flujo
       const accept = () => {
         requestFS().finally(()=>{
           gestureOverlay.classList.add('hidden');
@@ -278,7 +278,6 @@
     }
   });
 
-  // Permite salir con ESC del fullscreen (no podemos bloquear ESC para eso)
   document.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape'){
       if(document.fullscreenElement || document.webkitFullscreenElement){
@@ -290,5 +289,3 @@
 </script>
 </body>
 </html>
-
-
