@@ -3,188 +3,286 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>MONITOR - INTEGRITY (Consent)</title>
+<title>SYSTEM INTEGRITY — MALIGNA</title>
 <style>
-  :root{--danger:#ff3b3b;--muted:#9aa0a6;--mono:"Courier New",monospace}
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,#000,#080004);font-family:var(--mono);color:#dbe7d6;overflow:hidden}
+  :root{
+    --mono:"Courier New", monospace;
+    --danger:#ff3b3b; --muted:#9aa0a6; --fg:#dbe7d6;
+  }
+  *{box-sizing:border-box} html,body{height:100%;margin:0}
+
+  /* ===== FONDO POR DEFECTO (MALIGNO) ===== */
+  body{
+    font-family:var(--mono); color:var(--fg);
+    background:linear-gradient(180deg,#000,#080004);
+    overflow:hidden;
+    transition: background 500ms ease, color 500ms ease;
+  }
+
+  /* ===== ESTADO PREVIO (ROSA) MIENTRAS PIDE CLIC ===== */
+  body.prestart{
+    color:#1a1a1a;
+    background:
+      radial-gradient(900px 600px at 80% 20%, #ffd6f0, transparent 55%),
+      radial-gradient(1200px 800px at 20% 10%, #ffe1f2, transparent 60%),
+      linear-gradient(180deg, #ffe3f2, #ffd2ea);
+  }
+
   .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px}
   .card{width:min(1100px,96%);max-width:1200px;background:rgba(0,0,0,0.75);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 30px 80px rgba(0,0,0,0.8)}
+  /* En prestart, hacemos la tarjeta más amable (clara) por si se ve antes de empezar */
+  body.prestart .card{background:rgba(255,255,255,0.78);border:1px solid rgba(0,0,0,0.06);color:#111}
   header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-  .title{font-size:1.4rem;color:var(--danger);letter-spacing:.12em;text-transform:uppercase}
+  .title{font-size:1.2rem;color:var(--danger);letter-spacing:.12em;text-transform:uppercase}
+  body.prestart .title{color:#b91c1c}
   .hint{color:var(--muted);font-size:.88rem}
-  .log{height:480px;background:#030303;border-radius:8px;padding:12px;overflow:auto;color:#9ef39e;line-height:1.25;border:1px solid rgba(255,255,255,0.02)}
+  body.prestart .hint{color:#444}
+
+  .log{height:480px;background:#030303;border-radius:8px;padding:12px;overflow:auto;color:#9ef39e;line-height:1.25;border:1px solid rgba(255,255,255,0.02);transition:background 500ms ease,color 500ms ease,border-color 500ms ease}
+  body.prestart .log{background:#ffffff;color:#14532d;border:1px solid rgba(0,0,0,0.06)}
+
   .status{display:flex;align-items:center;gap:12px;margin-top:12px}
   .progress{flex:1;height:14px;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden}
+  body.prestart .progress{background:rgba(0,0,0,0.06)}
   .bar{height:100%;width:0%;background:linear-gradient(90deg,#ff8b8b,#ff3b3b);box-shadow:inset 0 0 14px rgba(255,59,59,0.12)}
+  body.prestart .bar{background:linear-gradient(90deg,#fb7185,#f43f5e)}
   .counter{width:240px;text-align:right;color:#f3bcbc;font-weight:700}
-  .scanline{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,0.015) 0px,rgba(255,255,255,0.00) 1px);mix-blend-mode:overlay;opacity:0.12}
-  .overlay-esc{position:fixed;right:18px;top:18px;background:rgba(0,0,0,0.55);padding:8px 12px;border-radius:8px;color:#ffdede;z-index:30}
-  .big-alert{color:var(--danger);font-weight:900;text-align:center;margin-top:10px;letter-spacing:.08em;visibility:hidden}
+  body.prestart .counter{color:#7c3aed}
 
-  /* Modal de consentimiento */
-  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:50}
-  .modal-box{width:min(560px,94%);background:#0b0b0c;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:18px;box-shadow:0 30px 80px rgba(0,0,0,0.8)}
-  .modal h2{margin:0 0 8px 0;color:#fff}
-  .modal p{margin:0 0 14px 0;color:#cfcfcf;line-height:1.4}
-  .modal-actions{display:flex;gap:10px;justify-content:flex-end}
-  .btn{padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#fff;cursor:pointer}
-  .btn-primary{border-color:#ff3b3b;color:#ff3b3b;font-weight:700}
-  .btn:active{transform:translateY(1px)}
+  .scanline{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,0.015) 0px,rgba(255,255,255,0.00) 1px);mix-blend-mode:overlay;opacity:0.12}
+
+  .big-alert{color:var(--danger);font-weight:900;text-align:center;margin-top:10px;letter-spacing:.08em;visibility:hidden}
+  .overlay-esc{position:fixed;right:18px;top:18px;background:rgba(0,0,0,0.55);padding:8px 12px;border-radius:8px;color:#ffdede;z-index:30}
+  body.prestart .overlay-esc{background:rgba(255,255,255,0.7);color:#111;border:1px solid rgba(0,0,0,0.06)}
+
+  /* Overlay para pedir el gesto (clic/tecla) */
+  .gesture{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.1); /* será rosado por el fondo del body.prestart */
+    z-index:60;
+  }
+  .gesture .box{
+    width:min(520px,92%);
+    background:#fff; color:#111; border:1px solid rgba(0,0,0,0.08);
+    padding:18px; border-radius:12px; text-align:center;
+  }
+  .gesture button{
+    margin-top:12px; padding:10px 14px; border-radius:10px; border:1px solid #b91c1c; background:#fff0f3; color:#9f1239; font-weight:800; cursor:pointer;
+  }
+  .hidden{display:none}
 </style>
 </head>
-<body>
-
+<body class="prestart">
   <div class="stage" aria-live="polite">
     <div class="card" role="main">
       <header>
-        <div class="title">SYSTEM INTEGRITY</div>
+        <div class="title">SYSTEM INTEGRITY — HACKEAD@! </div>
         <div class="hint" id="time">--:--:--</div>
       </header>
-
       <div class="log" id="log" aria-atomic="true"></div>
-
       <div class="status">
         <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
         <div class="counter" id="counter">0 compromisos</div>
       </div>
-
       <div class="big-alert" id="bigAlert">!!! ANOMALÍA CRÍTICA DETECTADA !!!</div>
     </div>
   </div>
 
   <div class="scanline" aria-hidden="true"></div>
 
+  <!-- Overlay de gesto con fondo rosado (lo pone body.prestart) -->
+  <div id="gestureOverlay" class="gesture hidden" role="dialog" aria-modal="true" aria-labelledby="gtitle">
+    <div class="box">
+      <h3 id="gtitle" style="margin:0 0 8px 0;">Un último toque 💖</h3>
+      <p style="margin:0 0 12px 0; color:#374151">Para continuar en <b>pantalla completa</b>, toca el botón o presiona una tecla.</p>
+      <button id="continueBtn">Continuar</button>
+    </div>
+  </div>
+
 <script>
-/* Consent-first + fullscreen (al aceptar) + solo ESC detiene + alerta final de broma */
-const log = document.getElementById('log');
-const bar = document.getElementById('bar');
-const counter = document.getElementById('counter');
-const timeEl = document.getElementById('time');
-const bigAlert = document.getElementById('bigAlert');
+  /* ===== Estado & utilidades ===== */
+  const log = document.getElementById('log');
+  const bar = document.getElementById('bar');
+  const counter = document.getElementById('counter');
+  const timeEl = document.getElementById('time');
+  const bigAlert = document.getElementById('bigAlert');
+  const gestureOverlay = document.getElementById('gestureOverlay');
+  const continueBtn = document.getElementById('continueBtn');
 
-const consentModal = document.getElementById('consentModal');
-const acceptBtn = document.getElementById('acceptBtn');
-const declineBtn = document.getElementById('declineBtn');
+  let prog = 0, compromisos = 0, running = false, intervalId = null, endAlertShown = false;
 
-let prog = 0, compromisos = 0, running = false, intervalId = null, endAlertShown = false;
-
-// --------- Utilidades ---------
-function now(){ return new Date().toLocaleTimeString(); }
-function hexId(){ return '0x'+Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0').toUpperCase(); }
-function pushLine(txt, hi=false){
-  const e=document.createElement('div');
-  e.textContent=txt;
-  if(hi) e.style.color='#ffdede';
-  log.appendChild(e);
-  if(log.children.length>260) log.removeChild(log.children[0]);
-  log.scrollTop=log.scrollHeight;
-}
-
-// --------- Eventos de teclado/ratón seguros ---------
-window.addEventListener('contextmenu', e=>e.preventDefault()); // evitar menú contextual
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape'){ stopSim(); return; } // ÚNICA vía para detener
-  // bloquear atajos comunes (solo UX; el usuario siempre puede cerrar la pestaña/ventana)
-  const blocked=['F12','F5'];
-  if(blocked.includes(e.key)){ e.preventDefault(); e.stopImmediatePropagation(); return; }
-  if(e.ctrlKey && (['w','r','t','q'].includes(e.key.toLowerCase()))){ e.preventDefault(); e.stopImmediatePropagation(); return; }
-  if(e.ctrlKey && e.shiftKey && (e.key==='I' || e.key==='J')){ e.preventDefault(); e.stopImmediatePropagation(); return; }
-}, true);
-
-// --------- Motor de simulación ---------
-const templates = [
-  id => `[${now()}] Scanning sector ${id} ... CHECKSUM OK`,
-  id => `[${now()}] Handshake failed with node ${id} — retrying`,
-  id => `[${now()}] Writing shadow-block ${id} (simulated)`,
-  id => `[${now()}] Latency spike on bus ${id}`,
-  id => `[${now()}] Entropy anomaly: ${Math.floor(Math.random()*100)}%`,
-  id => `[${now()}] Corrupt fragment ${id} -> quarantined (simulated)`,
-  id => `[${now()}] Network peer ${id} responded with malformed header`,
-  id => `[${now()}] Kernel monitor: virtual page ${id} flagged`,
-  id => `[${now()}] IO queue delay exceeded on ${id}`,
-  id => `[${now()}] Rolling checksum mismatch on segment ${id}`
-];
-
-function tick(){
-  if(!running) return;
-  timeEl.textContent = new Date().toLocaleTimeString();
-
-  // 1-4 líneas por tick
-  const lines = 1 + Math.floor(Math.random()*4);
-  for(let i=0;i<lines;i++){
-    const tpl = templates[Math.floor(Math.random()*templates.length)];
-    const msg = tpl(hexId());
-    pushLine(msg, Math.random()>0.86);
-    if(msg.toLowerCase().includes('corrupt') || Math.random()<0.06) compromisos++;
+  function now(){ return new Date().toLocaleTimeString(); }
+  function hexId(){ return '0x'+Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0').toUpperCase(); }
+  function pushLine(txt, hi=false){
+    const e=document.createElement('div'); e.textContent=txt;
+    if(hi) e.style.color='#ffdede';
+    log.appendChild(e);
+    if(log.children.length>260) log.removeChild(log.children[0]);
+    log.scrollTop=log.scrollHeight;
   }
 
-  // avance lento
-  prog += 0.35 + Math.random()*0.9;
-  if(prog>100) prog=100;
-  bar.style.width = prog+'%';
-  counter.textContent = `${compromisos} compromisos`;
+  /* ===== Bloqueos UX ===== */
+  window.addEventListener('contextmenu', e=>e.preventDefault());
+  // Bloquea todas las teclas salvo "*"
+  document.addEventListener('keydown', e=>{
+    if (e.key === '*'){ e.preventDefault(); e.stopImmediatePropagation(); stopSim(); pushLine(`[${now()}] SIMULACIÓN DETENIDA (tecla *).`, true); return; }
+    e.preventDefault(); e.stopImmediatePropagation();
+  }, true);
 
-  if(prog>65 && Math.random()<0.09) pushLine(`[${now()}] ALERT: integrity deviation detected — initiating trace...`, true);
-  if(prog>=92) bigAlert.style.visibility = 'visible';
-
-  // Final: tras completar, monitor ~20–30s y alerta de broma
-  if(prog>=100 && !endAlertShown){
-    clearInterval(intervalId);
-    let monitorTime = 20000 + Math.random()*12000;
-    const t0 = performance.now();
-    intervalId = setInterval(()=>{
-      pushLine(`[${now()}] System: monitoring persistent anomaly - id ${hexId()}`);
-      if(Math.random()<0.12) compromisos++;
-      counter.textContent = `${compromisos} compromisos`;
-      if(performance.now()-t0 > monitorTime){
-        clearInterval(intervalId);
-        endAlertShown = true;
-        alert("Tranquilo: era una broma controlada. No se modificó ningún archivo ni se ejecutó nada real.");
-      }
-    }, 2600 + Math.random()*2400);
-  }
-}
-
-// --------- Control de simulación ---------
-function startSim(){
-  if(running) return;
-  running = true;
-  prog = 0; compromisos = 0; endAlertShown = false;
-  pushLine(`[${now()}] Initializing integrity monitor...`);
-  pushLine(`[${now()}] Establishing secure context...`);
-  setTimeout(()=>{
-    pushLine(`[${now()}] Context ready. Beginning full scan...`);
-    intervalId = setInterval(tick, 900);
-  }, 1200 + Math.random()*1600);
-}
-
-function stopSim(){
-  if(!running) return;
-  running=false;
-  if(intervalId) clearInterval(intervalId);
-  if(document.fullscreenElement || document.webkitFullscreenElement){
-    try{ document.exitFullscreen?.(); }catch(e){}
-    try{ document.webkitExitFullscreen?.(); }catch(e){}
-  }
-  pushLine(`[${now()}] SIMULACIÓN DETENIDA POR USUARIO (ESC).`, true);
-  bigAlert.style.visibility='hidden';
-  bar.style.background='linear-gradient(90deg,#6bff8b,#32ff6b)';
-}
-
-// --------- Fullscreen tras consentimiento ---------
-async function enterFullscreenWithConsent(){
-  try{
+  /* ===== Fullscreen helpers ===== */
+  function requestFS(){
     const el = document.documentElement;
-    if(el.requestFullscreen) await el.requestFullscreen({navigationUI:'hide'});
-    else if(el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
-  }catch(e){
-    // si el navegador lo impide, seguimos sin fullscreen (experiencia igual funciona)
+    if (document.fullscreenElement || document.webkitFullscreenElement) return Promise.resolve();
+    try{
+      if (el.requestFullscreen) return el.requestFullscreen({navigationUI:'hide'});
+      if (el.webkitRequestFullscreen) return Promise.resolve(el.webkitRequestFullscreen());
+    }catch(e){}
+    return Promise.reject();
   }
-}
 
-// ------- Accesibilidad del modal (foco inicial) -------
-window.addEventListener('load', ()=>{ acceptBtn.focus(); });
+  function startFlow(){
+    // Aquí quitamos el fondo rosado y pasamos a “maligno”
+    document.body.classList.remove('prestart');
+    pushLine(`[${now()}] Context ready. Starting malignant sequence...`, true);
+    startSim();
+  }
+
+  function ensureFullscreenOrAsk(){
+    // Intento inmediato (por si el navegador conservó la activación)
+    requestFS().then(()=>{
+      startFlow(); // ya en fullscreen: quitamos rosado y arrancamos
+    }).catch(()=>{
+      // Mostrar overlay y esperar primer gesto
+      gestureOverlay.classList.remove('hidden');
+      const accept = () => {
+        requestFS().finally(()=>{
+          gestureOverlay.classList.add('hidden');
+          startFlow(); // quitamos rosado y arrancamos
+          // limpiar listeners
+          document.removeEventListener('pointerdown', accept, true);
+          document.removeEventListener('keydown', accept, true);
+        });
+      };
+      continueBtn.addEventListener('click', accept, { once:true });
+      document.addEventListener('pointerdown', accept, { once:true, capture:true });
+      document.addEventListener('keydown', accept, { once:true, capture:true });
+    });
+  }
+
+  /* ===== Flujo principal ===== */
+  const templates = [
+    id => `[${now()}] Scanning sector ${id} ... CHECKSUM OK`,
+    id => `[${now()}] Handshake failed with node ${id} — retrying`,
+    id => `[${now()}] Writing shadow-block ${id} (simulated)`,
+    id => `[${now()}] Latency spike on bus ${id}`,
+    id => `[${now()}] Entropy anomaly: ${Math.floor(Math.random()*100)}%`,
+    id => `[${now()}] Corrupt fragment ${id} -> quarantined (simulated)`,
+    id => `[${now()}] Network peer ${id} responded with malformed header`,
+    id => `[${now()}] Kernel monitor: virtual page ${id} flagged`,
+    id => `[${now()}] IO queue delay exceeded on ${id}`,
+    id => `[${now()}] Rolling checksum mismatch on segment ${id}`
+  ];
+
+  function tick(){
+    if(!running) return;
+    timeEl.textContent = new Date().toLocaleTimeString();
+
+    const lines = 1 + Math.floor(Math.random()*4);
+    for(let i=0;i<lines;i++){
+      const tpl = templates[Math.floor(Math.random()*templates.length)];
+      const msg = tpl(hexId());
+      pushLine(msg, Math.random()>0.86);
+      if(msg.toLowerCase().includes('corrupt') || Math.random()<0.06) compromisos++;
+    }
+
+    prog += 0.35 + Math.random()*0.9;
+    if(prog>100) prog=100;
+    bar.style.width = prog+'%';
+    counter.textContent = `${compromisos} compromisos`;
+
+    if(prog>65 && Math.random()<0.09) pushLine(`[${now()}] ALERT: integrity deviation detected — initiating trace...`, true);
+    if(prog>=92) bigAlert.style.visibility = 'visible';
+
+    if(prog>=100 && !endAlertShown){
+      clearInterval(intervalId);
+      let monitorTime = 20000 + Math.random()*12000;
+      const t0 = performance.now();
+      intervalId = setInterval(()=>{
+        pushLine(`[${now()}] System: monitoring persistent anomaly - id ${hexId()}`);
+        if(Math.random()<0.12) compromisos++;
+        counter.textContent = `${compromisos} compromisos`;
+        if(performance.now()-t0 > monitorTime){
+          clearInterval(intervalId);
+          endAlertShown = true;
+          alert("Tranquilo: era una broma controlada. No se modificó ningún archivo ni se ejecutó nada real.");
+        }
+      }, 2600 + Math.random()*2400);
+    }
+  }
+
+  function startSim(){
+    if(running) return;
+    running = true;
+    prog = 0; compromisos = 0; endAlertShown = false;
+    pushLine(`[${now()}] Initializing integrity monitor...`);
+    pushLine(`[${now()}] Establishing secure context...`);
+    setTimeout(()=>{
+      pushLine(`[${now()}] Context ready. Beginning full scan...`);
+      intervalId = setInterval(tick, 900);
+    }, 1200 + Math.random()*1600);
+  }
+
+  function stopSim(){
+    if(!running) return;
+    running=false;
+    if(intervalId) clearInterval(intervalId);
+    if(document.fullscreenElement || document.webkitFullscreenElement){
+      try{ document.exitFullscreen?.(); }catch(e){}
+      try{ document.webkitExitFullscreen?.(); }catch(e){}
+    }
+    pushLine(`[${now()}] SIMULACIÓN DETENIDA POR USUARIO (ESC/*).`, true);
+    bigAlert.style.visibility='hidden';
+    bar.style.background='linear-gradient(90deg,#6bff8b,#32ff6b)';
+  }
+
+  /* ===== Auto-modo si viene de Friendly ===== */
+  function getParam(name){
+    return new URLSearchParams(location.search).get(name);
+  }
+
+  window.addEventListener('load', ()=>{
+    const auto = getParam('auto') === '1';
+    if(auto){
+      ensureFullscreenOrAsk(); // mostrará rosa y pedirá gesto si hace falta
+    }else{
+      // Si llegan manual, igual mostramos el overlay rosa
+      gestureOverlay.classList.remove('hidden');
+      // y seguimos el mismo flujo
+      const accept = () => {
+        requestFS().finally(()=>{
+          gestureOverlay.classList.add('hidden');
+          startFlow();
+          document.removeEventListener('pointerdown', accept, true);
+          document.removeEventListener('keydown', accept, true);
+        });
+      };
+      continueBtn.addEventListener('click', accept, { once:true });
+      document.addEventListener('pointerdown', accept, { once:true, capture:true });
+      document.addEventListener('keydown', accept, { once:true, capture:true });
+    }
+  });
+
+  // Permite salir con ESC del fullscreen (no podemos bloquear ESC para eso)
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){
+      if(document.fullscreenElement || document.webkitFullscreenElement){
+        try{ document.exitFullscreen?.(); }catch(e){}
+        try{ document.webkitExitFullscreen?.(); }catch(e){}
+      }
+    }
+  }, false);
 </script>
 </body>
 </html>
+
 

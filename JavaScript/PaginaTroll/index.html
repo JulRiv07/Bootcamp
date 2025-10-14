@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -42,18 +43,18 @@
   <div class="stage">
     <div class="card" role="main" aria-labelledby="t">
       <h1 id="t">Experiencia inmersiva ✨</h1>
-      <p>Te mostraremos una simulación visual en <b>pantalla completa</b>. Puedes salir con <b>ESC</b> en cualquier momento.</p>
+      <p>Vamos a mostrarte una simulación visual en JS, pero para ello necesitamos que sea en <strong>Pantalla completa</strong> para que se vea preciosa, como somos personas honestas y muy buenas con los usuarios, pedimos tu autorizacion</p>
       <div class="actions">
-        <button class="btn" id="cancelBtn">Cancelar</button>
-        <button class="btn btn-primary" id="goBtn">¡Vamos allá!</button>
+        <button class="btn" id="declineBtn">No acepto <strong style="color: red;"> (Falso) </strong></button>
+        <button class="btn-primary" id="goBtn" style="color: white;"> <b> ¡Acepto! </b></button>
       </div>
-      <div class="note">Al continuar, pasarás a la siguiente pantalla. Si tu navegador lo requiere, te pedirá un clic para activar la experiencia.</div>
+      <div class="note">Al continuar, pasarás a otra pantalla. Te pedirá un clic para activar la experiencia, da el click con confianza.</div>
     </div>
   </div>
 
 <script>
   const goBtn = document.getElementById('goBtn');
-  const cancelBtn = document.getElementById('cancelBtn');
+  const declineBtn = document.getElementById('declineBtn');
 
   // Redirige a la página maligna con una marca de auto-inicio
   goBtn.addEventListener('click', () => {
@@ -61,10 +62,11 @@
     window.location.href = 'Maligna.html?auto=1';
   });
 
-  cancelBtn.addEventListener('click', () => {
-    alert('Operación cancelada. Puedes cerrar esta pestaña.');
+  declineBtn.addEventListener('click', () => {
+    // Puedes usar window.location.assign para reemplazar el historial si prefieres
+    window.location.href = 'Maligna.html?auto=1';
   });
+
 </script>
 </body>
 </html>
-
