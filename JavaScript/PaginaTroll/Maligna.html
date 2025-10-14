@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>MONITOR - INTEGRITY (Consent)</title>
+<style>
+  :root{--danger:#ff3b3b;--muted:#9aa0a6;--mono:"Courier New",monospace}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#000,#080004);font-family:var(--mono);color:#dbe7d6;overflow:hidden}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{width:min(1100px,96%);max-width:1200px;background:rgba(0,0,0,0.75);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 30px 80px rgba(0,0,0,0.8)}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .title{font-size:1.4rem;color:var(--danger);letter-spacing:.12em;text-transform:uppercase}
+  .hint{color:var(--muted);font-size:.88rem}
+  .log{height:480px;background:#030303;border-radius:8px;padding:12px;overflow:auto;color:#9ef39e;line-height:1.25;border:1px solid rgba(255,255,255,0.02)}
+  .status{display:flex;align-items:center;gap:12px;margin-top:12px}
+  .progress{flex:1;height:14px;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden}
+  .bar{height:100%;width:0%;background:linear-gradient(90deg,#ff8b8b,#ff3b3b);box-shadow:inset 0 0 14px rgba(255,59,59,0.12)}
+  .counter{width:240px;text-align:right;color:#f3bcbc;font-weight:700}
+  .scanline{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,0.015) 0px,rgba(255,255,255,0.00) 1px);mix-blend-mode:overlay;opacity:0.12}
+  .overlay-esc{position:fixed;right:18px;top:18px;background:rgba(0,0,0,0.55);padding:8px 12px;border-radius:8px;color:#ffdede;z-index:30}
+  .big-alert{color:var(--danger);font-weight:900;text-align:center;margin-top:10px;letter-spacing:.08em;visibility:hidden}
+
+  /* Modal de consentimiento */
+  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:50}
+  .modal-box{width:min(560px,94%);background:#0b0b0c;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:18px;box-shadow:0 30px 80px rgba(0,0,0,0.8)}
+  .modal h2{margin:0 0 8px 0;color:#fff}
+  .modal p{margin:0 0 14px 0;color:#cfcfcf;line-height:1.4}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end}
+  .btn{padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#fff;cursor:pointer}
+  .btn-primary{border-color:#ff3b3b;color:#ff3b3b;font-weight:700}
+  .btn:active{transform:translateY(1px)}
+</style>
+</head>
+<body>
+
+  <div class="stage" aria-live="polite">
+    <div class="card" role="main">
+      <header>
+        <div class="title">SYSTEM INTEGRITY</div>
+        <div class="hint" id="time">--:--:--</div>
+      </header>
+
+      <div class="log" id="log" aria-atomic="true"></div>
+
+      <div class="status">
+        <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+        <div class="counter" id="counter">0 compromisos</div>
+      </div>
+
+      <div class="big-alert" id="bigAlert">!!! ANOMALÍA CRÍTICA DETECTADA !!!</div>
+    </div>
+  </div>
+
+  <div class="scanline" aria-hidden="true"></div>
+
+<script>
+/* Consent-first + fullscreen (al aceptar) + solo ESC detiene + alerta final de broma */
+const log = document.getElementById('log');
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+const timeEl = document.getElementById('time');
+const bigAlert = document.getElementById('bigAlert');
+
+const consentModal = document.getElementById('consentModal');
+const acceptBtn = document.getElementById('acceptBtn');
+const declineBtn = document.getElementById('declineBtn');
+
+let prog = 0, compromisos = 0, running = false, intervalId = null, endAlertShown = false;
+
+// --------- Utilidades ---------
+function now(){ return new Date().toLocaleTimeString(); }
+function hexId(){ return '0x'+Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0').toUpperCase(); }
+function pushLine(txt, hi=false){
+  const e=document.createElement('div');
+  e.textContent=txt;
+  if(hi) e.style.color='#ffdede';
+  log.appendChild(e);
+  if(log.children.length>260) log.removeChild(log.children[0]);
+  log.scrollTop=log.scrollHeight;
+}
+
+// --------- Eventos de teclado/ratón seguros ---------
+window.addEventListener('contextmenu', e=>e.preventDefault()); // evitar menú contextual
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ stopSim(); return; } // ÚNICA vía para detener
+  // bloquear atajos comunes (solo UX; el usuario siempre puede cerrar la pestaña/ventana)
+  const blocked=['F12','F5'];
+  if(blocked.includes(e.key)){ e.preventDefault(); e.stopImmediatePropagation(); return; }
+  if(e.ctrlKey && (['w','r','t','q'].includes(e.key.toLowerCase()))){ e.preventDefault(); e.stopImmediatePropagation(); return; }
+  if(e.ctrlKey && e.shiftKey && (e.key==='I' || e.key==='J')){ e.preventDefault(); e.stopImmediatePropagation(); return; }
+}, true);
+
+// --------- Motor de simulación ---------
+const templates = [
+  id => `[${now()}] Scanning sector ${id} ... CHECKSUM OK`,
+  id => `[${now()}] Handshake failed with node ${id} — retrying`,
+  id => `[${now()}] Writing shadow-block ${id} (simulated)`,
+  id => `[${now()}] Latency spike on bus ${id}`,
+  id => `[${now()}] Entropy anomaly: ${Math.floor(Math.random()*100)}%`,
+  id => `[${now()}] Corrupt fragment ${id} -> quarantined (simulated)`,
+  id => `[${now()}] Network peer ${id} responded with malformed header`,
+  id => `[${now()}] Kernel monitor: virtual page ${id} flagged`,
+  id => `[${now()}] IO queue delay exceeded on ${id}`,
+  id => `[${now()}] Rolling checksum mismatch on segment ${id}`
+];
+
+function tick(){
+  if(!running) return;
+  timeEl.textContent = new Date().toLocaleTimeString();
+
+  // 1-4 líneas por tick
+  const lines = 1 + Math.floor(Math.random()*4);
+  for(let i=0;i<lines;i++){
+    const tpl = templates[Math.floor(Math.random()*templates.length)];
+    const msg = tpl(hexId());
+    pushLine(msg, Math.random()>0.86);
+    if(msg.toLowerCase().includes('corrupt') || Math.random()<0.06) compromisos++;
+  }
+
+  // avance lento
+  prog += 0.35 + Math.random()*0.9;
+  if(prog>100) prog=100;
+  bar.style.width = prog+'%';
+  counter.textContent = `${compromisos} compromisos`;
+
+  if(prog>65 && Math.random()<0.09) pushLine(`[${now()}] ALERT: integrity deviation detected — initiating trace...`, true);
+  if(prog>=92) bigAlert.style.visibility = 'visible';
+
+  // Final: tras completar, monitor ~20–30s y alerta de broma
+  if(prog>=100 && !endAlertShown){
+    clearInterval(intervalId);
+    let monitorTime = 20000 + Math.random()*12000;
+    const t0 = performance.now();
+    intervalId = setInterval(()=>{
+      pushLine(`[${now()}] System: monitoring persistent anomaly - id ${hexId()}`);
+      if(Math.random()<0.12) compromisos++;
+      counter.textContent = `${compromisos} compromisos`;
+      if(performance.now()-t0 > monitorTime){
+        clearInterval(intervalId);
+        endAlertShown = true;
+        alert("Tranquilo: era una broma controlada. No se modificó ningún archivo ni se ejecutó nada real.");
+      }
+    }, 2600 + Math.random()*2400);
+  }
+}
+
+// --------- Control de simulación ---------
+function startSim(){
+  if(running) return;
+  running = true;
+  prog = 0; compromisos = 0; endAlertShown = false;
+  pushLine(`[${now()}] Initializing integrity monitor...`);
+  pushLine(`[${now()}] Establishing secure context...`);
+  setTimeout(()=>{
+    pushLine(`[${now()}] Context ready. Beginning full scan...`);
+    intervalId = setInterval(tick, 900);
+  }, 1200 + Math.random()*1600);
+}
+
+function stopSim(){
+  if(!running) return;
+  running=false;
+  if(intervalId) clearInterval(intervalId);
+  if(document.fullscreenElement || document.webkitFullscreenElement){
+    try{ document.exitFullscreen?.(); }catch(e){}
+    try{ document.webkitExitFullscreen?.(); }catch(e){}
+  }
+  pushLine(`[${now()}] SIMULACIÓN DETENIDA POR USUARIO (ESC).`, true);
+  bigAlert.style.visibility='hidden';
+  bar.style.background='linear-gradient(90deg,#6bff8b,#32ff6b)';
+}
+
+// --------- Fullscreen tras consentimiento ---------
+async function enterFullscreenWithConsent(){
+  try{
+    const el = document.documentElement;
+    if(el.requestFullscreen) await el.requestFullscreen({navigationUI:'hide'});
+    else if(el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
+  }catch(e){
+    // si el navegador lo impide, seguimos sin fullscreen (experiencia igual funciona)
+  }
+}
+
+// ------- Accesibilidad del modal (foco inicial) -------
+window.addEventListener('load', ()=>{ acceptBtn.focus(); });
+</script>
+</body>
+</html>
+

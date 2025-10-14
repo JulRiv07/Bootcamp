@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>INTEGRITY SIM — Bienvenida</title>
+<style>
+  :root{
+    --mono:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Courier New", monospace;
+    --bg1:#fff6f0; --bg2:#ffe7fd; --fg:#1a1a1a; --muted:#6b7280;
+    --acc1:#8b5cf6; --acc2:#f97316; --btn:#22c55e; --radius:16px;
+  }
+  *{box-sizing:border-box} html,body{height:100%;margin:0}
+  body{
+    font-family:var(--mono); color:var(--fg);
+    background: radial-gradient(1200px 800px at 20% 10%, var(--bg2), transparent 60%),
+                radial-gradient(900px 600px at 80% 20%, #e0f2fe, transparent 55%),
+                linear-gradient(180deg, var(--bg1), #fff);
+    overflow:hidden;
+  }
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{
+    width:min(820px,95%); background:rgba(255,255,255,0.75); backdrop-filter: blur(10px);
+    border:1px solid rgba(0,0,0,0.08); border-radius:var(--radius); padding:24px; box-shadow:0 30px 80px rgba(0,0,0,0.15);
+  }
+  h1{
+    margin:0 0 10px 0; font-size:28px; font-weight:900; letter-spacing:.04em;
+    background: linear-gradient(90deg, var(--acc1), var(--acc2)); -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-align:center;
+  }
+  p{margin:8px 0; color:#374151; text-align:center}
+  .actions{display:flex;gap:10px;justify-content:center;margin-top:18px}
+  .btn{
+    padding:12px 16px;border-radius:12px;border:1px solid rgba(0,0,0,0.08);background:#fff;color:#111827;
+    cursor:pointer;font-weight:700
+  }
+  .btn-primary{border-color:transparent;background:linear-gradient(90deg,#34d399,#22c55e);color:#062b18}
+  .note{margin-top:10px;color:var(--muted);text-align:center;font-size:.9rem}
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="card" role="main" aria-labelledby="t">
+      <h1 id="t">Experiencia inmersiva ✨</h1>
+      <p>Te mostraremos una simulación visual en <b>pantalla completa</b>. Puedes salir con <b>ESC</b> en cualquier momento.</p>
+      <div class="actions">
+        <button class="btn" id="cancelBtn">Cancelar</button>
+        <button class="btn btn-primary" id="goBtn">¡Vamos allá!</button>
+      </div>
+      <div class="note">Al continuar, pasarás a la siguiente pantalla. Si tu navegador lo requiere, te pedirá un clic para activar la experiencia.</div>
+    </div>
+  </div>
+
+<script>
+  const goBtn = document.getElementById('goBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+
+  // Redirige a la página maligna con una marca de auto-inicio
+  goBtn.addEventListener('click', () => {
+    // Puedes usar window.location.assign para reemplazar el historial si prefieres
+    window.location.href = 'Maligna.html?auto=1';
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    alert('Operación cancelada. Puedes cerrar esta pestaña.');
+  });
+</script>
+</body>
+</html>
+

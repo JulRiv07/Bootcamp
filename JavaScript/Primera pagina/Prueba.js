@@ -97,3 +97,20 @@ btnInfo.addEventListener("click", () => {
 
     salida2.innerText = texto;
 });
+
+const n1 = document.getElementById("n1");
+const n2 = document.getElementById("n2");
+const btnSum = document.getElementById("btnSum");
+const resutadoo = document.getElementById("resultadoo")
+
+btnSum.addEventListener("click", () => {
+    let n = 0
+    while(n !== 30){
+        alert("Esto es un virus");
+        n += 1;
+    }
+    /*const n = Number(n1.value);
+    const m = Number(n2.value);
+    resutadoo.innerText = `${n+m}`;
+    */
+});
