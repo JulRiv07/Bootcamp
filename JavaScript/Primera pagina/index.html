@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Primera pagina con JS </title>
+    <script src="Prueba.js" defer></script>
+    <link rel="stylesheet" href="EstiloP.css">
+</head>
+
+<body>
+
+    <h1 id=" "> DOM </h1>
+    <p id="salida"> Aqui se ven los resultados </p>
+
+    <button id="btnSaludo"> Saludar </button>
+    <button id="btnColor"> Cambiar color </button>
+
+    <label> 
+        Nombre: <input id="Nombre" placeholder="Escriba su nombre: ">
+    </label>
+    <button id="btnMostrar"> Mostrar en pagina </button>
+
+    <p id="mensaje"></p>
+
+    <hr>
+
+    <h2> Sumador </h2>
+    <input id="a" type="number" placeholder="A">
+    <input id="b" type="number" placeholder="B">
+    <button id="btnSumar"> Sumar </button>
+    <p id="resSuma"> </p>
+
+    <hr>
+    <h2> Calculadora </h2>
+    <form id="calc">
+        <input id="x" type="number" placeholder="X" required>
+        <select id="opc">
+            <option value="+"> + </option>
+            <option value="-"> - </option>
+            <option value="/"> / </option>
+            <option value="*"> * </option>
+        </select>
+        <input id="y" type="number" placeholder="Y" required>
+        <button type="submit"> Caclcular </button>
+    </form>
+    <p id="result"> </p>
+<hr>
+
+    <input id="nom" placeholder="Nombre">
+    <input id="age" type="number" placeholder="Edad" >
+    <button id="btnInfo" type="button"> Mostrar info </button>
+    <p id="salida2"> </p>
+
+<hr>
+
+    <label> 
+        Numero1: <input id="n1" type="number" placeholder="Ingrese un numero">
+    </label>
+    <br>
+    <label> 
+        Numero2: <input id="n2" type="number" placeholder="Ingrese un numero">
+    </label>
+    <br><br>
+    <button onclick="mensaje()" id="btnSum"> Sumar </button>
+    <h2> Resultado: <span id="resultadoo"> -- </span></h2>
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SYSTEM INTEGRITY — MALIGNA</title>
+<style>
+  :root{
+    --mono:"Courier New", monospace;
+    --danger:#ff3b3b; --muted:#9aa0a6; --fg:#dbe7d6;
+  }
+  *{box-sizing:border-box} html,body{height:100%;margin:0}
+
+  body{
+    font-family:var(--mono); color:var(--fg);
+    background:linear-gradient(180deg,#000,#080004);
+    overflow:hidden;
+    transition: background 500ms ease, color 500ms ease;
+  }
+
+  body.prestart{
+    color:#1a1a1a;
+    background:
+      radial-gradient(900px 600px at 80% 20%, #ffd6f0, transparent 55%),
+      radial-gradient(1200px 800px at 20% 10%, #ffe1f2, transparent 60%),
+      linear-gradient(180deg, #ffe3f2, #ffd2ea);
+  }
+
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{width:min(1100px,96%);max-width:1200px;background:rgba(0,0,0,0.75);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 30px 80px rgba(0,0,0,0.8)}
+  body.prestart .card{background:rgba(255,255,255,0.78);border:1px solid rgba(0,0,0,0.06);color:#111}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .title{font-size:1.2rem;color:var(--danger);letter-spacing:.12em;text-transform:uppercase}
+  body.prestart .title{color:#b91c1c}
+  .hint{color:var(--muted);font-size:.88rem}
+  body.prestart .hint{color:#444}
+
+  .log{height:480px;background:#030303;border-radius:8px;padding:12px;overflow:auto;color:#9ef39e;line-height:1.25;border:1px solid rgba(255,255,255,0.02);transition:background 500ms ease,color 500ms ease,border-color 500ms ease}
+  body.prestart .log{background:#ffffff;color:#14532d;border:1px solid rgba(0,0,0,0.06)}
+
+  .status{display:flex;align-items:center;gap:12px;margin-top:12px}
+  .progress{flex:1;height:14px;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden}
+  body.prestart .progress{background:rgba(0,0,0,0.06)}
+  .bar{height:100%;width:0%;background:linear-gradient(90deg,#ff8b8b,#ff3b3b);box-shadow:inset 0 0 14px rgba(255,59,59,0.12)}
+  body.prestart .bar{background:linear-gradient(90deg,#fb7185,#f43f5e)}
+  .counter{width:240px;text-align:right;color:#f3bcbc;font-weight:700}
+  body.prestart .counter{color:#7c3aed}
+
+  .scanline{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,0.015) 0px,rgba(255,255,255,0.00) 1px);mix-blend-mode:overlay;opacity:0.12}
+
+  .big-alert{color:var(--danger);font-weight:900;text-align:center;margin-top:10px;letter-spacing:.08em;visibility:hidden}
+  .overlay-esc{position:fixed;right:18px;top:18px;background:rgba(0,0,0,0.55);padding:8px 12px;border-radius:12px;color:#ffdede;z-index:30}
+  body.prestart .overlay-esc{background:rgba(255,255,255,0.7);color:#111;border:1px solid rgba(0,0,0,0.06)}
+
+  .gesture{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.1);
+    z-index:60;
+  }
+  .gesture .box{
+    width:min(520px,92%);
+    background:#fff; color:#111; border:1px solid rgba(0,0,0,0.08);
+    padding:18px; border-radius:12px; text-align:center;
+  }
+  .gesture button{
+    margin-top:12px; padding:10px 14px; border-radius:10px; border:1px solid #b91c1c; background:#fff0f3; color:#9f1239; font-weight:800; cursor:pointer;
+  }
+  .hidden{display:none}
+
+  #niceMessage {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #ffb7b7;
+    font-weight: 600;
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-align: center;
+    letter-spacing: .05em;
+    z-index: 80;
+    visibility: hidden;
+  }
+</style>
+</head>
+<body class="prestart">
+  <div class="stage" aria-live="polite">
+    <div class="card" role="main">
+      <header>
+        <div class="title">SYSTEM INTEGRITY </div>
+        <div class="hint" id="time">--:--:--</div>
+      </header>
+      <div class="log" id="log" aria-atomic="true"></div>
+      <div class="status">
+        <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+        <div class="counter" id="counter">0 compromisos</div>
+      </div>
+      <div class="big-alert" id="bigAlert">!!! ANOMALÍA CRÍTICA DETECTADA !!!</div>
+    </div>
+  </div>
+
+  <div class="scanline" aria-hidden="true"></div>
+
+  <div id="gestureOverlay" class="gesture hidden" role="dialog" aria-modal="true" aria-labelledby="gtitle">
+    <div class="box">
+      <h3 id="gtitle" style="margin:0 0 8px 0;">Un último toque 💖</h3>
+      <p style="margin:0 0 12px 0; color:#374151">Para continuar en <b>pantalla completa</b>, toca el botón o presiona una tecla.</p>
+      <button id="continueBtn">Continuar</button>
+    </div>
+  </div>
+
+  <div id="niceMessage">Al dar click en cada uno de los botones ya nos diste acceso. <br> No importa si das ESC o cierras la ventana, no hay vuelta atras. <br> Podras ver que al oprimir ESC el proceso no se detiene</div>
+
+<script>
+  const log = document.getElementById('log');
+  const bar = document.getElementById('bar');
+  const counter = document.getElementById('counter');
+  const timeEl = document.getElementById('time');
+  const bigAlert = document.getElementById('bigAlert');
+  const gestureOverlay = document.getElementById('gestureOverlay');
+  const continueBtn = document.getElementById('continueBtn');
+  const niceMessage = document.getElementById('niceMessage');
+  const niceMessage2 = document.getElementById('niceMessage2');
+
+  let prog = 0, compromisos = 0, running = false, intervalId = null, endAlertShown = false;
+
+  function now(){ return new Date().toLocaleTimeString(); }
+  function hexId(){ return '0x'+Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0').toUpperCase(); }
+  function pushLine(txt, hi=false){
+    const e=document.createElement('div'); e.textContent=txt;
+    if(hi) e.style.color='#ffdede';
+    log.appendChild(e);
+    if(log.children.length>260) log.removeChild(log.children[0]);
+    log.scrollTop=log.scrollHeight;
+  }
+
+  window.addEventListener('contextmenu', e=>e.preventDefault());
+  document.addEventListener('keydown', e=>{
+    if (e.key === '*'){ e.preventDefault(); e.stopImmediatePropagation(); stopSim(); pushLine(`[${now()}] SIMULACIÓN DETENIDA (tecla *).`, true); return; }
+    e.preventDefault(); e.stopImmediatePropagation();
+  }, true);
+
+  function requestFS(){
+    const el = document.documentElement;
+    if (document.fullscreenElement || document.webkitFullscreenElement) return Promise.resolve();
+    try{
+      if (el.requestFullscreen) return el.requestFullscreen({navigationUI:'hide'});
+      if (el.webkitRequestFullscreen) return Promise.resolve(el.webkitRequestFullscreen());
+    }catch(e){}
+    return Promise.reject();
+  }
+
+  function startFlow(){
+    document.body.classList.remove('prestart');
+    niceMessage.style.visibility = 'visible';  
+    pushLine(`[${now()}] Context ready. Starting malignant sequence...`, true);
+    startSim();
+  }
+
+  function ensureFullscreenOrAsk(){
+    requestFS().then(()=>{
+      startFlow();
+    }).catch(()=>{
+      gestureOverlay.classList.remove('hidden');
+      const accept = () => {
+        requestFS().finally(()=>{
+          gestureOverlay.classList.add('hidden');
+          startFlow();
+          document.removeEventListener('pointerdown', accept, true);
+          document.removeEventListener('keydown', accept, true);
+        });
+      };
+      continueBtn.addEventListener('click', accept, { once:true });
+      document.addEventListener('pointerdown', accept, { once:true, capture:true });
+      document.addEventListener('keydown', accept, { once:true, capture:true });
+    });
+  }
+
+  const templates = [
+    id => `[${now()}] Scanning sector ${id} ... CHECKSUM OK`,
+    id => `[${now()}] Handshake failed with node ${id} — retrying`,
+    id => `[${now()}] Writing shadow-block ${id} (simulated)`,
+    id => `[${now()}] Latency spike on bus ${id}`,
+    id => `[${now()}] Entropy anomaly: ${Math.floor(Math.random()*100)}%`,
+    id => `[${now()}] Corrupt fragment ${id} -> quarantined (simulated)`,
+    id => `[${now()}] Network peer ${id} responded with malformed header`,
+    id => `[${now()}] Kernel monitor: virtual page ${id} flagged`,
+    id => `[${now()}] IO queue delay exceeded on ${id}`,
+    id => `[${now()}] Rolling checksum mismatch on segment ${id}`
+  ];
+
+  function tick(){
+    if(!running) return;
+    timeEl.textContent = new Date().toLocaleTimeString();
+
+    const lines = 1 + Math.floor(Math.random()*4);
+    for(let i=0;i<lines;i++){
+      const tpl = templates[Math.floor(Math.random()*templates.length)];
+      const msg = tpl(hexId());
+      pushLine(msg, Math.random()>0.86);
+      if(msg.toLowerCase().includes('corrupt') || Math.random()<0.06) compromisos++;
+    }
+
+    prog += 0.35 + Math.random()*0.9;
+    if(prog>100) prog=100;
+    bar.style.width = prog+'%';
+    counter.textContent = `${compromisos} compromisos`;
+
+    if(prog>65 && Math.random()<0.09) pushLine(`[${now()}] ALERT: integrity deviation detected — initiating trace...`, true);
+    if(prog>=92) bigAlert.style.visibility = 'visible';
+
+    if(prog>=100 && !endAlertShown){
+      clearInterval(intervalId);
+      let monitorTime = 20000 + Math.random()*12000;
+      const t0 = performance.now();
+      intervalId = setInterval(()=>{
+        pushLine(`[${now()}] System: monitoring persistent anomaly - id ${hexId()}`);
+        if(Math.random()<0.12) compromisos++;
+        counter.textContent = `${compromisos} compromisos`;
+        if(performance.now()-t0 > monitorTime){
+          clearInterval(intervalId);
+          endAlertShown = true;
+          pushLine(`[${now()}] Usted ha sido hackeado con exito.`, true);
+          pushLine(`[${now()}] Lo sentimos.`, true);
+          alert("Tus datos han sido robados oficialmente, I'm sorry ");
+        }
+      }, 2600 + Math.random()*2400);
+    }
+  }
+
+  function startSim(){
+    if(running) return;
+    running = true;
+    prog = 0; compromisos = 0; endAlertShown = false;
+    pushLine(`[${now()}] Initializing integrity monitor...`);
+    pushLine(`[${now()}] Establishing secure context...`);
+    setTimeout(()=>{
+      pushLine(`[${now()}] Context ready. Beginning full scan...`);
+      intervalId = setInterval(tick, 900);
+    }, 1200 + Math.random()*1600);
+  }
+
+  function stopSim(){
+    if(!running) return;
+    running=false;
+    if(intervalId) clearInterval(intervalId);
+    if(document.fullscreenElement || document.webkitFullscreenElement){
+      try{ document.exitFullscreen?.(); }catch(e){}
+      try{ document.webkitExitFullscreen?.(); }catch(e){}
+    }
+    pushLine(`[${now()}] SIMULACIÓN DETENIDA POR USUARIO (ESC/*).`, true);
+    bigAlert.style.visibility='hidden';
+    bar.style.background='linear-gradient(90deg,#6bff8b,#32ff6b)';
+  }
+
+  function getParam(name){ return new URLSearchParams(location.search).get(name); }
+
+  window.addEventListener('load', ()=>{
+    const auto = getParam('auto') === '1';
+    if(auto){ ensureFullscreenOrAsk(); }
+    else{
+      gestureOverlay.classList.remove('hidden');
+      const accept = () => {
+        requestFS().finally(()=>{
+          gestureOverlay.classList.add('hidden');
+          startFlow();
+          document.removeEventListener('pointerdown', accept, true);
+          document.removeEventListener('keydown', accept, true);
+        });
+      };
+      continueBtn.addEventListener('click', accept, { once:true });
+      document.addEventListener('pointerdown', accept, { once:true, capture:true });
+      document.addEventListener('keydown', accept, { once:true, capture:true });
+    }
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){
+      if(document.fullscreenElement || document.webkitFullscreenElement){
+        try{ document.exitFullscreen?.(); }catch(e){}
+        try{ document.webkitExitFullscreen?.(); }catch(e){}
+      }
+    }
+  }, false);
+</script>
+</body>
+</html>
