@@ -1,6 +1,6 @@
 (function(){
     
-    const sliders = [...document.querySelectorAll('.testimony_body')];
+    const sliders = [...document.querySelectorAll('.testimony_sbody')];
     const buttonNext = document.querySelector('#next');
     const buttonBefore = document.querySelector('#before');
     let value;   
