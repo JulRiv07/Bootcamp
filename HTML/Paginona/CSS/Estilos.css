@@ -615,4 +615,31 @@ body {
     .testimony_arrow{
         width: 100%;
     }
+
+    .testimony_course{
+        margin-top: 15px;
+    }
+
+    .questions_title{
+        font-size: 15px;
+    }
+
+    .footer_title{
+        justify-self: start;
+        margin-bottom: 15px;
+    }
+
+    .nav--footer{
+        padding-bottom: 60px;
+    }
+
+    .nav_link--footer{
+        justify-content: space-between;
+    }
+
+    .footer_inputs{
+        flex-wrap: wrap;
+    }
+
+    
 }
