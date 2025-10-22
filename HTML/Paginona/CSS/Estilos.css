@@ -641,5 +641,14 @@ body {
         flex-wrap: wrap;
     }
 
-    
+    .footer_input{
+        flex-basis: 100%;
+        margin: 0;
+        margin-bottom: 16px;
+    }
+
+    .footer_submit{
+        margin-right: auto;
+        margin-left: 0;
+    }
 }
