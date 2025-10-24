@@ -1,104 +1,103 @@
 body {
-  font-family: "Poppins", sans-serif;
-  margin: 0;
-  color: #0b2447;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    color: #0b2447;
+    height: 700px;
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: #f7f9ff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #f7f9ff;
 }
 
-/* ===== NAV ===== */
 .nav {
-  background: #1f6feb;
-  border-radius: 0 0 14px 14px;
-  display: flex;
-  align-items: center;
-  padding: 18px 40px; /* menos padding lateral */
+    background: #1f6feb;
+    border-radius: 0 0 14px 14px;
+    display: flex;
+    align-items: center;
+    padding: 18px 40px;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .logo-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
 }
 
 .logo-title {
-  color: #fff;
-  font-weight: 700;
-  margin: 0;
+    color: #fff;
+    font-weight: 700;
+    margin: 0;
 }
 
 .menu {
-  list-style: none;
-  margin-left: auto;
-  display: flex;
-  align-items: center; /* centra verticalmente todos los ítems */
-  gap: 20px;
-  padding: 0;
+    list-style: none;
+    margin-left: auto;
+    display: flex;
+    border: 0;
+    align-items: center;
+    gap: 20px;
+    padding: 0;
 }
 
 .menu-item {
-  position: relative;
-  display: flex;
-  align-items: center; /* fuerza que el botón quede alineado */
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .menu-link,
 .dropdown-btn {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center; /* centrado vertical del texto */
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center; 
 }
 
 .menu-link:hover,
 .dropdown-btn:hover {
-  background: #1756b7;
+    background: #1756b7;
 }
 
 .caret {
-  font-size: 0.8em;
-  margin-left: 4px;
+    font-size: 0.8em;
+    margin-left: 4px;
 }
 
-/* ===== DROPDOWN ===== */
 .dropdown-menu {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  background: #fff;
-  color: #111;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  padding: 8px;
-  display: none;
-  min-width: 180px;
-  z-index: 10;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #fff;
+    color: #111;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    display: none;
+    min-width: 180px;
+    z-index: 10;
 }
 
 .dropdown:hover .dropdown-menu,
 .dropdown:focus-within .dropdown-menu {
-  display: block;
+    display: block;
 }
 
 .dropdown-link {
@@ -117,12 +116,11 @@ body {
 /* ===== HERO ===== */
 .hero {
     flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-    padding: 0 80px; /* más centrado horizontalmente */
+    display: flex;                
+    align-items: center;             
+    justify-content: center;          
+    gap: 40px;                        
+    padding: 0 40px;                 
     box-sizing: border-box;
 }
 
@@ -140,7 +138,7 @@ body {
 
 .hero-img {
     width: 100%;
-    max-width: 350px;
+    max-width: 320px;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     object-fit: cover;
@@ -148,21 +146,18 @@ body {
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 992px) {
-.hero {
-    grid-template-columns: 1fr;
-    text-align: center;
-    padding: 40px 40px;
+/* ===== Bloqueo para pantallas muy grandes (TV o monitores enormes) ===== */
+@media (min-width: 2000px) {
+    html, body {
+        max-width: 1800px;     
+        margin: 0 auto;        
+        display: block;        
+    }
+
+    .hero,
+    .header,
+    .nav {
+        width: 100%;
+        display: block;       
+    }
 }
-
-.hero-img {
-    margin: 0 auto;
-    max-width: 280px;
-}
-
-}
-
-
-
-
